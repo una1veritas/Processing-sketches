@@ -102,12 +102,23 @@ boolean ignoreWord(String what) {
   return false;
 }
 
+
+
 void addEdge(String fromLabel, String toLabel) {
   if ( ignoreWord(fromLabel) || ignoreWord(toLabel) )
   return;
   Node from = findNode(fromLabel);
   Node to = findNode(toLabel);
+  from.increment();
+  to.increment();
+  for(int i = 0; i < edgeCount; i++) {
+    if (edges[i].from == from && edges[i].to == to ) {
+      edges[i].increment();
+      return;
+    }
+  }
   Edge e = new Edge(from, to);
+  e.increment();
   if ( edgeCount == edges.length ) {
     edges = (Edge[]) expand(edges);
   }
@@ -138,6 +149,11 @@ class Edge {
   Node to;
   float len;
   
+  int count;
+  void increment() {
+    count++;
+  }
+
   Edge(Node from, Node to) {
     this.from = from;
     this.to = to;
@@ -171,6 +187,11 @@ class Node {
   float dx, dy;
   boolean fixed;
   String label;
+
+  int count;
+  void increment() {
+    count++;
+  }
 
   Node(String label) {
     this.label = label;
@@ -218,6 +239,8 @@ class Node {
   }
 
   void draw() {
+    if ( fixed ) {
+    /*
     if ( selection == this ) {
       fill(selectColor);
     } 
@@ -227,18 +250,30 @@ class Node {
     else {
       fill(nodeColor);
     }
+    */
+      fill(nodeColor);
+      stroke(0);
+      strokeWeight(0.5);
 
-    stroke(0);
-    strokeWeight(0.5);
+      rectMode(CORNER);
+      float w = textWidth(label) + 10;
+      float h = textAscent() + textDescent() + 4;
+      rect(x - w/2, y - h/2, w, h);
 
-    rectMode(CORNER);
-    float w = textWidth(label) + 10;
-    float h = textAscent() + textDescent() + 4;
-    rect(x - w/2, y - h/2, w, h);
-
-    fill(0);
-    textAlign(CENTER, CENTER);
-    text(label, x, y);
+      fill(0);
+      textAlign(CENTER, CENTER);
+      text(label, x, y);
+    } else {
+      fill(nodeColor);
+      stroke(0);
+      strokeWeight(0.5);
+      ellipse(x, y, count, count);
+      if ( 1.2*count > textWidth(label) ) {
+        fill(0);
+        textAlign(CENTER, CENTER);
+        text(label, x, y);
+      }
+    }
   }
 }
 

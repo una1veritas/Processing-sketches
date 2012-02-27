@@ -48,13 +48,14 @@ void draw() {
   int xb = 0;
   int[] yb = {40, 40, 160};
   int xd = 2;
-  for(int i = 0; i+1 < gHistMax; i++) {
+  for(int i = 2; i+1 < gHistMax; i++) {
     stroke(220,100,100);
-    line(xb, yb[0]+gAttention[i], xb+xd, yb[0]+gAttention[i+1]);
+    line(xb, yb[0]+(gAttention[i-2]+gAttention[i-1]+gAttention[i])/3, 
+        xb+xd, yb[0]+(gAttention[i-1]+gAttention[i]+gAttention[i+1])/3 );
     stroke(100,220,100);
     line(xb, yb[1]+gMeditation[i], xb+xd, yb[1]+gMeditation[i+1]);
     stroke(100,120,140);
-    line(xb, yb[2]+gRawWave[i]/4, xb+xd, yb[2]+gRawWave[i+1]/4);
+    line(xb, yb[2]+gRawWave[i]/8, xb+xd, yb[2]+gRawWave[i+1]/8);
     xb += xd;
   }
   text("attention",xb+10,yb[0]+gAttention[gHistMax-1]);

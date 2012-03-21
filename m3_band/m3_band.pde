@@ -52,11 +52,11 @@ void draw() {
   m3band.parsePacket();
   update(m3band);
   int xb = 20;
-  int yb[] = {64+16, 64+16, 128, 160, 200, 240};
+  int yb[] = {64+16, 64+16, 120, 160, 200, 240, 280, 310};
   int xd = 1;
   for (int i = 0; i+1 < gHistMax; i++) {
     stroke(80+i, 80+i, 100+i);
-    line(xb+xd*i, yb[5]+gRawWave[i]/10, xb+xd*(i+1), yb[5]+gRawWave[i+1]/10);
+    line(xb+xd*i, yb[7]+gRawWave[i]/8, xb+xd*(i+1), yb[7]+gRawWave[i+1]/8);
   }
   xd = 1;
   for (int i = 0; i+1 < gHistMax; i++) {
@@ -65,11 +65,15 @@ void draw() {
     stroke(80, 240, 120);
     line(xb+xd*i, yb[1]-map(gMeditation[i],0,100,0,48), xb+xd*(i+1), yb[1]-map(gMeditation[i+1],0,100,0,48) );
     stroke(200, 200, 200);
-    line(xb+xd*i, yb[2]-map(EEG[0][i],0,100,0,48), xb+xd*(i+1), yb[2]-map(EEG[0][i+1],0,100,0,48) );
+    line(xb+xd*i, yb[2]-map(EEG[0][i],0,50,0,48), xb+xd*(i+1), yb[2]-map(EEG[0][i+1],0,50,0,48) );
     stroke(200, 200, 200);
-    line(xb+xd*i, yb[3]-map(EEG[1][i],0,100,0,48), xb+xd*(i+1), yb[3]-map(EEG[1][i+1],0,100,0,48) );
+    line(xb+xd*i, yb[3]-map(EEG[1][i],0,50,0,48), xb+xd*(i+1), yb[3]-map(EEG[1][i+1],0,50,0,48) );
     stroke(200, 200, 200);
-    line(xb+xd*i, yb[4]-map(EEG[2][i],0,100,0,48), xb+xd*(i+1), yb[4]-map(EEG[2][i+1],0,100,0,48) );
+    line(xb+xd*i, yb[4]-map(EEG[2][i],0,50,0,48), xb+xd*(i+1), yb[4]-map(EEG[2][i+1],0,50,0,48) );
+    stroke(200, 200, 200);
+    line(xb+xd*i, yb[5]-map(EEG[3][i],0,50,0,48), xb+xd*(i+1), yb[5]-map(EEG[3][i+1],0,50,0,48) );
+    stroke(200, 200, 200);
+    line(xb+xd*i, yb[6]-map(EEG[4][i],0,50,0,48), xb+xd*(i+1), yb[6]-map(EEG[4][i+1],0,50,0,48) );
   }
   fill(240, 120, 80);
   text("attention", xb+260, yb[0]-map(gAttention[gHistMax-1],0,100,0,48));
@@ -101,13 +105,13 @@ void update(MindSet m) {
   gMeditation[gHistMax-1] = m.meditation;
   gRawWave[gHistMax-1] = m.rawWave;
   
-  EEG[0][gHistMax-1] = (int)(m.delta>>16);
-  EEG[3][gHistMax-1] = (int)(m.theta>>16);
-  EEG[2][gHistMax-1] = (int)(m.lowAlpha>>16);
-  EEG[3][gHistMax-1] = (int)(m.highAlpha>>16);
-  EEG[4][gHistMax-1] = (int)(m.lowBeta>>16);
-  EEG[5][gHistMax-1] = (int)(m.highBeta>>16);
-  EEG[6][gHistMax-1] = (int)(m.lowGamma>>16);
-  EEG[7][gHistMax-1] = (int)(m.midGamma>>16);
+  EEG[0][gHistMax-1] = (int)log(m.delta);
+  EEG[3][gHistMax-1] = (int)log(m.theta);
+  EEG[2][gHistMax-1] = (int)log(m.lowAlpha);
+  EEG[3][gHistMax-1] = (int)log(m.highAlpha);
+  EEG[4][gHistMax-1] = (int)log(m.lowBeta);
+  EEG[5][gHistMax-1] = (int)log(m.highBeta);
+  EEG[6][gHistMax-1] = (int)log(m.lowGamma);
+  EEG[7][gHistMax-1] = (int)log(m.midGamma);
 }
 
